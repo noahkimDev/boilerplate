@@ -1,5 +1,4 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = require("mongoose");
 // 스키마 작성
 const useSchema = mongoose.Schema({
@@ -38,4 +37,5 @@ const useSchema = mongoose.Schema({
 // const User = mongoose.model("모델명", 스키마);
 const User = mongoose.model("User", useSchema);
 // 모델 export
-exports.default = User;
+module.exports = { User };
+// export default User;
