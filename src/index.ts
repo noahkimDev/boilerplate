@@ -2,12 +2,14 @@ import express, { Request, Response, NextFunction } from "express";
 import env from "dotenv";
 
 const app = express();
+const router = express.Router();
 const port = 5000;
 
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 
 const { User } = require("./models/User");
+const { auth } = require("./middleware/auth");
 
 env.config();
 
@@ -73,6 +75,51 @@ app.post("/login", async (req: Request, res: Response, next: NextFunction) => {
   // db에 email 데이터가 있다면 => 비밀번호를 비교한다
   // 비밀번호까지 일치한다면  => Token 생성
 });
+
+// auth 미들웨어 추가
+// 미들웨어 : 요청을 받아서 req,res  콜백함수를 실행하기 전에 실행된다
+interface AuthenticatedRequest extends Request {
+  token?: string;
+  userInfo?: {
+    _id?: unknown;
+    name?: string;
+    lastname?: string;
+    email?: string;
+    password?: string;
+    role?: number;
+    image?: unknown;
+  };
+  // userInfo의 실제 유형이 있으면 'any' 대신 해당 유형으로 대체
+}
+app.get("/api/users/auth", auth, (req: AuthenticatedRequest, res: Response) => {
+  // 여기까지 왔다는건 미들웨어auth를 통과했다는 이야기이고
+  // authentication이 true라는 말
+  res.status(200).json({
+    _id: req.userInfo._id,
+    isAdmin: req.userInfo.role === 0 ? false : true,
+    isAuth: true,
+    email: req.userInfo.email,
+    name: req.userInfo.name,
+    lastname: req.userInfo.lastname,
+    role: req.userInfo.role,
+    image: req.userInfo.image,
+  });
+});
+
+app.get(
+  "/api/users/logout",
+  auth,
+  async (req: AuthenticatedRequest, res: Response) => {
+    // findOneAndUpdate() 사용 : 찾아서 업데이트한다.
+    /* 예시
+    const filter = { name: "Jean-Luc Picard" };
+    const update = { age: 59 };
+    let doc = await Character.findOneAndUpdate(filter, update);
+    */
+    await User.findOneAndUpdate({ _id: req.userInfo._id }, { token: "" });
+    return res.status(200).send({ success: true });
+  }
+);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.log("error 발생");

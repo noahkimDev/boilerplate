@@ -98,6 +98,20 @@ useSchema.methods = {
         });
     },
 };
+useSchema.statics = {
+    findByToken: function (token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = this;
+            // how to decode(복호화) : jsonwebtoken npm 사이트 확인
+            // 결고값은 user._id값이 나올 것 => token 만들 때 user._id를 넣었기때문
+            const userId = yield jwt.verify(token, "secretToken");
+            // userId를 사용하여 user를 찾아
+            // client에서 가져온 token과 db에서 찾은 token
+            // 일치하는지 확인
+            return yield user.findOne({ _id: userId, token: token });
+        });
+    },
+};
 // 모델로 스키마를 감싼다.
 // const User = mongoose.model("모델명", 스키마);
 const User = mongoose.model("User", useSchema);

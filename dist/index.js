@@ -15,10 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const app = (0, express_1.default)();
+const router = express_1.default.Router();
 const port = 5000;
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const { User } = require("./models/User");
+const { auth } = require("./middleware/auth");
 dotenv_1.default.config();
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
@@ -78,6 +80,30 @@ app.post("/login", (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     }
     // db에 email 데이터가 있다면 => 비밀번호를 비교한다
     // 비밀번호까지 일치한다면  => Token 생성
+}));
+app.get("/api/users/auth", auth, (req, res) => {
+    // 여기까지 왔다는건 미들웨어auth를 통과했다는 이야기이고
+    // authentication이 true라는 말
+    res.status(200).json({
+        _id: req.userInfo._id,
+        isAdmin: req.userInfo.role === 0 ? false : true,
+        isAuth: true,
+        email: req.userInfo.email,
+        name: req.userInfo.name,
+        lastname: req.userInfo.lastname,
+        role: req.userInfo.role,
+        image: req.userInfo.image,
+    });
+});
+app.get("/api/users/logout", auth, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // findOneAndUpdate() 사용 : 찾아서 업데이트한다.
+    /* 예시
+    const filter = { name: "Jean-Luc Picard" };
+    const update = { age: 59 };
+    let doc = await Character.findOneAndUpdate(filter, update);
+    */
+    yield User.findOneAndUpdate({ _id: req.userInfo._id }, { token: "" });
+    return res.status(200).send({ success: true });
 }));
 app.use((err, req, res, next) => {
     console.log("error 발생");
