@@ -45,7 +45,7 @@ app.post("/register", (req, res) => __awaiter(void 0, void 0, void 0, function* 
         .catch((err) => res.json({ success: false, err }));
 }));
 // 로그인 route
-app.post("/login", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/api/users/login", (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // 요청된 email데이터를 DB에서 찾는다
     const { email, password } = req.body;
     const user = yield User.findOne({ email: email });
@@ -105,6 +105,9 @@ app.get("/api/users/logout", auth, (req, res) => __awaiter(void 0, void 0, void 
     yield User.findOneAndUpdate({ _id: req.userInfo._id }, { token: "" });
     return res.status(200).send({ success: true });
 }));
+app.get("/api/hello", (req, res) => {
+    res.send("안녕");
+});
 app.use((err, req, res, next) => {
     console.log("error 발생");
     res.status(500).json({ message: err.message });
