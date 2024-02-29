@@ -125,7 +125,7 @@ app.get(
 );
 
 app.get("/api/hello", (req: Request, res: Response) => {
-  res.send("안녕");
+  res.send("Hello");
 });
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
