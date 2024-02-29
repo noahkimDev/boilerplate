@@ -25,7 +25,8 @@ mongoose
 app.get("/", (req: Request, res: Response) => res.send("hello world!"));
 
 // "/register" : 회원가입
-app.post("/register", async (req: Request, res: Response) => {
+app.post("/api/users/register", async (req: Request, res: Response) => {
+  console.log("뭥미");
   // 회원가입할 때 필요한 정보들(req.body)을 client에서 가져오면
   // 그것들을 db에 넣어준다.
   // (mongoose)User model instance를 생성하고
@@ -97,6 +98,7 @@ interface AuthenticatedRequest extends Request {
 app.get("/api/users/auth", auth, (req: AuthenticatedRequest, res: Response) => {
   // 여기까지 왔다는건 미들웨어auth를 통과했다는 이야기이고
   // authentication이 true라는 말
+  console.log("good");
   res.status(200).json({
     _id: req.userInfo._id,
     isAdmin: req.userInfo.role === 0 ? false : true,

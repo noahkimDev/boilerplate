@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
 import axios from "axios";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function LandingPage() {
+  const navigate = useNavigate();
   // LandingPage가 랜딩되자마자 실행되는 코드
   useEffect(() => {
     axios
@@ -11,6 +13,16 @@ function LandingPage() {
       .get("/api/hello") //
       .then((res) => console.log(res));
   }, []);
+  const onClickHandler = () => {
+    axios.get("/api/users/logout").then((res) => {
+      // console.log(res.data);
+      if (res.data.success) {
+        return navigate("/login");
+      } else {
+        alert("failed to logout");
+      }
+    });
+  };
 
   return (
     <div
@@ -23,6 +35,7 @@ function LandingPage() {
       }}
     >
       <h2>시작페이지</h2>
+      <button onClick={onClickHandler}>로그아웃</button>
     </div>
   );
 }

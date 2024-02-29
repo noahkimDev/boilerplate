@@ -1,10 +1,10 @@
 // Action
 import axios from "axios";
-import { LOGIN_USER } from "./types";
+import { LOGIN_USER, REGISTER_USER, AUTH_USER } from "./types";
 // import { createAsyncThunk } from "@reduxjs/toolkit";
 // action은 return 값이 객체 형태
 
-//여기부터
+//Action #1
 export function loginUser(dataToSubmit) {
   const request = axios
     .post("/api/users/login", dataToSubmit) //
@@ -39,18 +39,36 @@ export function loginUser(dataToSubmit) {
   };
 }
 
-// export const loginUser = createAsyncThunk(LOGIN_USER, async (dataToSubmit) => {
-//   const request = axios
-//     .post("/api/users/login", dataToSubmit) //
-//     .then((response) => {
-//       return response.data;
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
+// Action #2
+export function registerUser(dataToSubmit) {
+  const request = axios
+    .post("/api/users/register", dataToSubmit) //
+    .then((response) => {
+      return response.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
-//   return {
-//     type: LOGIN_USER,
-//     payload: request,
-//   };
-// });
+  return {
+    type: REGISTER_USER,
+    payload: request,
+  };
+}
+
+// Action #3
+export function auth() {
+  const request = axios
+    .get("/api/users/auth") //
+    .then((response) => {
+      return response.data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  return {
+    type: AUTH_USER,
+    payload: request,
+  };
+}
