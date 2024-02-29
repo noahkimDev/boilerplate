@@ -1,7 +1,7 @@
 /* eslint-disable no-unreachable */
 /* eslint-disable import/no-anonymous-default-export */
 // Reducer
-import { LOGIN_USER } from "../_actions/types";
+import { LOGIN_USER, REGISTER_USER, AUTH_USER } from "../_actions/types";
 
 //! action은 return{type: , payload: }가 할당되어오고
 //! state에는 (아마도) store에서 가져오지않겠나
@@ -19,7 +19,12 @@ export default function (state = {}, action) {
       //이전 state와 전달받은 action => next state를 생성
       return { ...state, loginSuccess: action.payload };
       break;
-
+    case REGISTER_USER:
+      return { ...state, registerSuccess: action.payload };
+      break;
+    case AUTH_USER:
+      return { ...state, userData: action.payload };
+      break;
     default:
       return state;
   }
