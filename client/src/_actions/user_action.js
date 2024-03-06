@@ -61,6 +61,7 @@ export function auth() {
   const request = axios
     .get("/api/users/auth") //
     .then((response) => {
+      // console.log(response.data);
       return response.data;
     })
     .catch((err) => {

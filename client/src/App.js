@@ -16,6 +16,9 @@ function App() {
           <Route exact path="/" Component={Auth(LandingPage, null)} />
           <Route exact path="/login" Component={Auth(LoginPage, false)} />
           <Route exact path="/register" Component={Auth(RegisterPage, false)} />
+          {/* <Route exact path="/" Component={LandingPage} />
+          <Route exact path="/login" Component={LoginPage} />
+          <Route exact path="/register" Component={RegisterPage} /> */}
         </Routes>
       </Router>
     </div>

@@ -124,9 +124,9 @@ app.get(
   }
 );
 
-app.get("/api/hello", (req: Request, res: Response) => {
-  res.send("Hello");
-});
+// app.get("/api/hello", (req: Request, res: Response) => {
+//   res.send("Hello");
+// });
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.log("error 발생");

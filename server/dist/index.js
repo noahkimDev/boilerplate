@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
+// boiler-plate
 const app = (0, express_1.default)();
 const router = express_1.default.Router();
 const port = 5000;
@@ -32,7 +33,6 @@ mongoose
 app.get("/", (req, res) => res.send("hello world!"));
 // "/register" : 회원가입
 app.post("/api/users/register", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("뭥미");
     // 회원가입할 때 필요한 정보들(req.body)을 client에서 가져오면
     // 그것들을 db에 넣어준다.
     // (mongoose)User model instance를 생성하고
@@ -85,7 +85,6 @@ app.post("/api/users/login", (req, res, next) => __awaiter(void 0, void 0, void 
 app.get("/api/users/auth", auth, (req, res) => {
     // 여기까지 왔다는건 미들웨어auth를 통과했다는 이야기이고
     // authentication이 true라는 말
-    console.log("good");
     res.status(200).json({
         _id: req.userInfo._id,
         isAdmin: req.userInfo.role === 0 ? false : true,
@@ -107,9 +106,9 @@ app.get("/api/users/logout", auth, (req, res) => __awaiter(void 0, void 0, void 
     yield User.findOneAndUpdate({ _id: req.userInfo._id }, { token: "" });
     return res.status(200).send({ success: true });
 }));
-app.get("/api/hello", (req, res) => {
-    res.send("안녕");
-});
+// app.get("/api/hello", (req: Request, res: Response) => {
+//   res.send("Hello");
+// });
 app.use((err, req, res, next) => {
     console.log("error 발생");
     res.status(500).json({ message: err.message });
